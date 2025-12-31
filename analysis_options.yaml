@@ -1,0 +1,27 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/*.options.dart"
+    - "**/*.imports.dart"
+    - "generated/**"
+  errors:
+    invalid_annotation_target: ignore
+
+plugins:
+  jaspr_lints:
+    version: ^0.6.0
+    diagnostics:
+      prefer_html_components: true
+      sort_children_last: true
+      styles_ordering: true
+
+linter:
+  rules:
+    - prefer_double_quotes
+    - prefer_relative_imports
+
+formatter:
+  page_width: 110

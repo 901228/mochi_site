@@ -6,8 +6,8 @@
 
 import 'package:jaspr/client.dart';
 
-import 'package:mochi_portal/components/portal.dart' deferred as _portal;
-import 'package:mochi_portal/theme/_catppuccin/base.dart' as _base;
+import 'package:mochi_site/components/layout/header.dart' deferred as _header;
+import 'package:mochi_site/pages/portal.page.dart' deferred as _portal$page;
 
 /// Default [ClientOptions] for use with your Jaspr project.
 ///
@@ -27,14 +27,15 @@ import 'package:mochi_portal/theme/_catppuccin/base.dart' as _base;
 /// ```
 ClientOptions get defaultClientOptions => ClientOptions(
   clients: {
-    'portal': ClientLoader(
-      (p) => _portal.PortalCard(
-        portal: _portal.PortalItem.decode(p['portal'] as Map<String, dynamic>),
-        flavorTheme: p['flavorTheme'] != null
-            ? _base.FlavorTheme.decode(p['flavorTheme'] as Map<String, dynamic>)
-            : null,
+    'header': ClientLoader(
+      (p) => _header.Header(),
+      loader: _header.loadLibrary,
+    ),
+    'portal.page': ClientLoader(
+      (p) => _portal$page.PortalCard(
+        item: _portal$page.PortalItem.decode(p['item'] as Map<String, dynamic>),
       ),
-      loader: _portal.loadLibrary,
+      loader: _portal$page.loadLibrary,
     ),
   },
 );

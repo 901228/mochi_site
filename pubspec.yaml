@@ -1,5 +1,5 @@
-name: mochi_portal
-description: A simple portal page
+name: mochi_site
+description: Mochi's Site
 version: 0.0.1
 
 environment:

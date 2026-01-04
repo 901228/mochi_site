@@ -1,4 +1,4 @@
-# mochi_portal
+# mochi_site
 
 A new Jaspr project
 

@@ -5,12 +5,9 @@
 // Generated with jaspr_builder
 
 import 'package:jaspr/server.dart';
-import 'package:mochi_portal/components/circular_progreess_indicator.dart'
-    as _circular_progreess_indicator;
-import 'package:mochi_portal/components/header.dart' as _header;
-import 'package:mochi_portal/components/portal.dart' as _portal;
-import 'package:mochi_portal/pages/portal.dart' as _pages_portal;
-import 'package:mochi_portal/app.dart' as _app;
+import 'package:mochi_site/components/layout/header.dart' as _header;
+import 'package:mochi_site/pages/portal.page.dart' as _portal$page;
+import 'package:mochi_site/app.dart' as _app;
 
 /// Default [ServerOptions] for use with your Jaspr project.
 ///
@@ -31,20 +28,15 @@ import 'package:mochi_portal/app.dart' as _app;
 ServerOptions get defaultServerOptions => ServerOptions(
   clientId: 'main.client.dart.js',
   clients: {
-    _portal.PortalCard: ClientTarget<_portal.PortalCard>(
-      'portal',
-      params: __portalPortalCard,
+    _header.Header: ClientTarget<_header.Header>('header'),
+    _portal$page.PortalCard: ClientTarget<_portal$page.PortalCard>(
+      'portal.page',
+      params: __portal$pagePortalCard,
     ),
   },
-  styles: () => [
-    ..._circular_progreess_indicator.CircularProgressIndicator.styles,
-    ..._header.Header.styles,
-    ..._pages_portal.Portal.styles,
-    ..._app.App.styles,
-  ],
+  styles: () => [..._app.App.styles],
 );
 
-Map<String, Object?> __portalPortalCard(_portal.PortalCard c) => {
-  'portal': c.portal.encode(),
-  'flavorTheme': c.flavorTheme?.encode(),
+Map<String, Object?> __portal$pagePortalCard(_portal$page.PortalCard c) => {
+  'item': c.item.encode(),
 };

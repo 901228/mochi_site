@@ -2,7 +2,7 @@ import "package:jaspr/dom.dart";
 import "package:jaspr/jaspr.dart";
 import "package:universal_web/web.dart" as web;
 
-import "../components/ui/bulma/modifier.dart" show isWebSkeleton;
+import "../components/ui/bulma.dart";
 
 class PortalItem {
   final String name;
@@ -32,24 +32,21 @@ class PortalCard extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     final url = item.url;
-    final cardContent = div(classes: "card $isWebSkeleton", [
-      div(classes: "card-image", [
-        figure(classes: "image is-square", [
-          img(
-            src: item.image,
-            styles: Styles(padding: .all(2.rem)),
-            alt: "${item.name} logo",
-          ),
-        ]),
-      ]),
-      div(classes: "card-content", [
-        div(classes: "content has-text-centered", [.text(item.name)]),
-      ]),
-    ]);
+    final cardContent = Card(
+      classes: isWebSkeleton,
+      cardImage: Image(
+        src: item.image,
+        alt: "${item.name} logo",
+        imageStyles: Styles(padding: .all(2.rem)),
+      ),
+      cardContent: div(classes: "content has-text-centered", [.text(item.name)]),
+    );
 
-    return div(classes: "cell", [
-      if (kIsWeb) a(href: url ?? "#", [cardContent]) else cardContent,
-    ]);
+    if (kIsWeb && url != null) {
+      return a(href: url, [cardContent]);
+    } else {
+      return cardContent;
+    }
   }
 }
 
@@ -62,7 +59,7 @@ class PortalPage extends StatelessComponent {
   Component build(BuildContext context) {
     return section(classes: "section", [
       div(classes: "container", [
-        div(classes: "grid is-col-min-8", portals.map((item) => PortalCard(item: item)).toList()),
+        Grid(minimumColumnWidth: 8, children: portals.map((item) => PortalCard(item: item)).toList()),
       ]),
     ]);
   }

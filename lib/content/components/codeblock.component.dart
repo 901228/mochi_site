@@ -9,13 +9,20 @@ import "../../theme/theme.dart";
 class CodeBlock extends CustomComponent {
   const CodeBlock() : super.base();
 
-  String getLanguage(Map<String, String> attributes) {
+  static Component from({required String? source, bool isInline = false, String? language, Key? key}) {
+    if (!isInline) {
+      return BlockCode(key: key, source: source, language: language);
+    } else {
+      return InlineCode(key: key, source: source, language: language);
+    }
+  }
+
+  String? getLanguage(Map<String, String> attributes) {
     String? language = attributes["language"];
     if (language == null && (attributes["class"]?.startsWith("language-") ?? false)) {
       language = attributes["class"]!.substring("language-".length);
     }
-
-    return language ?? "plaintext";
+    return language;
   }
 
   @override
@@ -29,28 +36,37 @@ class CodeBlock extends CustomComponent {
       final language = getLanguage(attributes);
       final source = children?.map((c) => c.innerText).join(" ");
 
-      return div(classes: "code-block card", [
-        CopyButton(selectors: "pre code"),
-        pre(classes: "card-content", styles: Styles(margin: .zero), [
-          code(
-            classes: "language-$language",
-            styles: Styles(padding: .zero, backgroundColor: Colors.transparent),
-            [if (source != null) .text(source)],
-          ),
-        ]),
-        script(attributes: {"type": "text/javascript"}, content: "hljs.highlightAll();"),
-      ]);
+      return from(source: source, isInline: false, language: language);
     } else if (node case ElementNode(tag: "code", :final children, :final attributes)) {
       final language = getLanguage(attributes);
       final source = children?.map((c) => c.innerText).join(" ");
 
-      return .fragment([
-        code(classes: "inline-code language-$language", [if (source != null) .text(source)]),
-        script(attributes: {"type": "text/javascript"}, content: "hljs.highlightAll();"),
-      ]);
+      return from(source: source, isInline: true, language: language);
     }
 
     return null;
+  }
+}
+
+class BlockCode extends StatelessComponent {
+  const BlockCode({super.key, required this.source, String? language}) : language = language ?? "plaintext";
+
+  final String language;
+  final String? source;
+
+  @override
+  Component build(BuildContext context) {
+    return div(classes: "code-block card", [
+      CopyButton(selectors: "pre code"),
+      pre(classes: "card-content", styles: Styles(margin: .zero), [
+        code(
+          classes: "language-$language",
+          styles: Styles(padding: .zero, backgroundColor: Colors.transparent),
+          [if (source != null) .text(source!)],
+        ),
+      ]),
+      script(attributes: {"type": "text/javascript"}, content: "hljs.highlightAll();"),
+    ]);
   }
 
   @css
@@ -71,6 +87,36 @@ class CodeBlock extends CustomComponent {
       css("&:hover .copy-button").styles(opacity: 0.75),
     ]),
 
+    css("code").styles(
+      fontFamily: .list([
+        FontFamily("Fira Code"),
+        FontFamily("FakePearl"),
+        FontFamily("Sans Mono"),
+        FontFamily("Consolas"),
+        FontFamilies.courierNew,
+        FontFamilies.courier,
+        FontFamilies.monospace,
+      ]),
+    ),
+  ];
+}
+
+class InlineCode extends StatelessComponent {
+  const InlineCode({super.key, required this.source, String? language}) : language = language ?? "plaintext";
+
+  final String language;
+  final String? source;
+
+  @override
+  Component build(BuildContext context) {
+    return .fragment([
+      code(classes: "inline-code language-$language", [if (source != null) .text(source!)]),
+      script(attributes: {"type": "text/javascript"}, content: "hljs.highlightAll();"),
+    ]);
+  }
+
+  @css
+  static List<StyleRule> get styles => [
     css("code").styles(
       fontFamily: .list([
         FontFamily("Fira Code"),

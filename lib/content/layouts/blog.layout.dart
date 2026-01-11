@@ -31,20 +31,21 @@ class MochiBlogLayoutComponent extends StatelessComponent {
           h1(classes: "title is-1", id: title.replaceAll(" ", "-"), [.text(title)]),
 
         div(classes: "metadata is-flex is-flex-direction-column", styles: Styles(gap: .row(0.5.rem)), [
-          div([
-            p([
-              .text(
-                [
-                  if (data.page["date"] case final String date)
-                    DateFormat("yyyy年MM月dd日").format(DateFormat("yyyy-MM-dd").parse(date)),
-                ].join(" • "),
-              ),
+          if (data.page["date"] case final String _)
+            div([
+              p([
+                .text(
+                  [
+                    if (data.page["date"] case final String date)
+                      DateFormat("yyyy年MM月dd日").format(DateFormat("yyyy-MM-dd").parse(date)),
+                  ].join(" • "),
+                ),
+              ]),
             ]),
-          ]),
 
-          div([
-            p(classes: "is-inline pr-2", [.text("Categories:")]),
-            if (data.page["tags"] case final List<Object?> tags)
+          if (data.page["tags"] case final List<Object?> tags)
+            div([
+              p(classes: "is-inline pr-2", [.text("Categories:")]),
               div(classes: "tags is-inline-flex", [
                 for (final tag in tags)
                   a(
@@ -53,11 +54,11 @@ class MochiBlogLayoutComponent extends StatelessComponent {
                     [.text(tag.toString())],
                   ),
               ]),
-          ]),
+            ]),
 
-          div([
-            p(classes: "is-inline pr-2", [.text("Tags:")]),
-            if (data.page["categories"] case final List<Object?> categories)
+          if (data.page["categories"] case final List<Object?> categories)
+            div([
+              p(classes: "is-inline pr-2", [.text("Tags:")]),
               div(classes: "tags is-inline-flex", [
                 for (final category in categories)
                   a(
@@ -66,7 +67,7 @@ class MochiBlogLayoutComponent extends StatelessComponent {
                     [.text(category.toString())],
                   ),
               ]),
-          ]),
+            ]),
         ]),
       ]),
       hr(

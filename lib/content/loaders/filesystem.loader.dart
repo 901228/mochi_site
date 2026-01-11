@@ -7,11 +7,13 @@ import "package:jaspr_content/jaspr_content.dart";
 class MochiFilesystemLoader extends FilesystemLoader {
   MochiFilesystemLoader(
     super.directory, {
+    this.prefixPath,
     super.keepSuffixPattern,
     super.debugPrint,
     this.fileSystemMochi = const LocalFileSystem(),
   });
 
+  final String? prefixPath;
   final FileSystem fileSystemMochi;
 
   @override
@@ -28,7 +30,7 @@ class MochiFilesystemLoader extends FilesystemLoader {
         if (entry is File) {
           entities.add(
             FilePageSource(
-              "blog/$path",
+              prefixPath == null ? path : "$prefixPath/$path",
               entry,
               this,
               keepSuffix: keepSuffixPattern?.matchAsPrefix(entry.path) != null,

@@ -2,7 +2,6 @@ library;
 
 import "package:jaspr/dom.dart";
 import "package:jaspr/server.dart";
-import "package:jaspr_content/components/file_tree.dart";
 import "package:jaspr_content/jaspr_content.dart";
 
 import "app.dart";
@@ -15,7 +14,7 @@ void main() {
 
   runApp(
     ContentApp.custom(
-      loaders: [MochiFilesystemLoader("content")],
+      loaders: [MochiFilesystemLoader("content", prefixPath: "blog")],
       configResolver: PageConfig.all(
         parsers: [MarkdownParser()],
         dataLoaders: [FilesystemDataLoader("content/_data")],
@@ -28,12 +27,18 @@ void main() {
           HeadingLink(),
           Image(),
           FileTree(), // TODO: rewrite
+          TocContent(),
         ],
         extensions: [TableOfContentsExtension()],
-        layouts: [MochiBlogLayout(), DocsLayout()],
+        layouts: [
+          MochiBlogLayout(), DocsLayout(), // TODO: rewrite
+          MochiTocLayout(),
+        ],
         theme: .none(),
       ),
       routerBuilder: (routes) {
+        final contentRoutes = routes.expand((r) => r).toList();
+
         return Document(
           title: "Mochi Site",
           lang: "zh-TW",
@@ -95,7 +100,12 @@ void main() {
             div(
               id: "root",
               attributes: {"data-theme": "light"},
-              [App(routes: routes.expand((r) => r).toList())],
+              [
+                RouterTree(
+                  routes: contentRoutes,
+                  child: App(routes: contentRoutes),
+                ),
+              ],
             ),
             ...lucideInitialization,
 

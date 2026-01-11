@@ -22,6 +22,30 @@ enum CalloutType {
 class Callout extends CustomComponent {
   const Callout() : super.base();
 
+  static Component from({required CalloutType callout, required String content, Key? key}) => blockquote(
+    key: key,
+    classes: "has-text-${callout.color}",
+    styles: Styles(
+      border: .only(
+        left: BorderSide(
+          color: Color(
+            "hsl(var(--bulma-${callout.color}-h),var(--bulma-${callout.color}-s),var(--bulma-${callout.color}-l))!important",
+          ),
+        ),
+      ),
+      // backgroundColor: Color(
+      //   "hsla(var(--bulma-${callout.color}-h),var(--bulma-${callout.color}-s),var(--bulma-${callout.color}-l), 8%)",
+      // ),
+    ),
+    [
+      IconLabel.iconText(
+        icon: .lucide(icon: callout.icon),
+        label: callout.name,
+      ),
+      p(classes: "pl-1", [.text(content)]),
+    ],
+  );
+
   static const Map<String, String> calloutsToClass = {
     "NOTE": "success",
     "INFO": "info",
@@ -39,28 +63,7 @@ class Callout extends CustomComponent {
       for (final callout in CalloutType.values) {
         if (text.trim().startsWith("[[!${callout.name.toUpperCase()}]]")) {
           final content = text.replaceAll("[[!${callout.name.toUpperCase()}]]", "");
-          return blockquote(
-            classes: "has-text-${callout.color}",
-            styles: Styles(
-              border: .only(
-                left: BorderSide(
-                  color: Color(
-                    "hsl(var(--bulma-${callout.color}-h),var(--bulma-${callout.color}-s),var(--bulma-${callout.color}-l))!important",
-                  ),
-                ),
-              ),
-              // backgroundColor: Color(
-              //   "hsla(var(--bulma-${callout.color}-h),var(--bulma-${callout.color}-s),var(--bulma-${callout.color}-l), 8%)",
-              // ),
-            ),
-            [
-              IconLabel.iconText(
-                icon: .lucide(icon: callout.icon),
-                label: callout.name,
-              ),
-              p(classes: "pl-1", [.text(content)]),
-            ],
-          );
+          return from(callout: callout, content: content);
         }
       }
     }

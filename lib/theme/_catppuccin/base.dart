@@ -1,11 +1,115 @@
-import "package:jaspr/dom.dart" show Color;
-import "package:jaspr/jaspr.dart" show decoder, encoder;
-
-import "../theme.dart";
 import "flavors/frappe.dart";
 import "flavors/latte.dart";
 import "flavors/macchiato.dart";
 import "flavors/mocha.dart";
+
+class Color {
+  final int hue;
+  final int saturation;
+  final int lightness;
+  const Color(this.hue, this.saturation, this.lightness);
+
+  int get h => hue;
+  int get s => saturation;
+  int get l => lightness;
+
+  static double _hue2rgb(double p, double q, double t) {
+    if (t < 0.0) {
+      t += 1.0;
+    }
+    if (t > 1) {
+      t -= 1.0;
+    }
+    if (t < 1.0 / 6.0) {
+      return p + (q - p) * 6.0 * t;
+    }
+    if (t < 1.0 / 2.0) {
+      return q;
+    }
+    if (t < 2.0 / 3.0) {
+      return p + (q - p) * (2.0 / 3.0 - t) * 6.0;
+    }
+    return p;
+  }
+
+  (double q, double p) _qp(double h, double s, double l) {
+    final q = l < 0.5 ? l * (1.0 + s) : l + s - l * s;
+    final p = 2.0 * l - q;
+    return (q, p);
+  }
+
+  int get r {
+    double h = hue / 360.0;
+    double s = saturation / 100.0;
+    double l = lightness / 100.0;
+
+    if (s == 0) {
+      return (l * 255.0).round();
+    }
+
+    final (q, p) = _qp(h, s, l);
+    final r = _hue2rgb(p, q, h + 1.0 / 3.0);
+    return (r * 255.0).round();
+  }
+
+  int get g {
+    double h = hue / 360.0;
+    double s = saturation / 100.0;
+    double l = lightness / 100.0;
+
+    if (s == 0) {
+      return (l * 255.0).round();
+    }
+
+    final (q, p) = _qp(h, s, l);
+    final g = _hue2rgb(p, q, h);
+    return (g * 255.0).round();
+  }
+
+  int get b {
+    double h = hue / 360.0;
+    double s = saturation / 100.0;
+    double l = lightness / 100.0;
+
+    if (s == 0) {
+      return (l * 255.0).round();
+    }
+
+    final (q, p) = _qp(h, s, l);
+    final b = _hue2rgb(p, q, h - 1.0 / 3.0);
+    return (b * 255.0).round();
+  }
+
+  (int r, int g, int b) get rgb {
+    double h = hue / 360.0;
+    double s = saturation / 100.0;
+    double l = lightness / 100.0;
+
+    if (s == 0) {
+      final gray = (l * 255.0).round();
+      return (gray, gray, gray);
+    }
+
+    final (q, p) = _qp(h, s, l);
+
+    final r = _hue2rgb(p, q, h + 1.0 / 3.0);
+    final g = _hue2rgb(p, q, h);
+    final b = _hue2rgb(p, q, h - 1.0 / 3.0);
+
+    return ((r * 255.0).round(), (g * 255.0).round(), (b * 255.0).round());
+  }
+
+  String get hex {
+    // ignore: no_leading_underscores_for_local_identifiers
+    final (_r, _g, _b) = rgb;
+    return "${_r.toRadixString(16).padLeft(2, '0')}${_g.toRadixString(16).padLeft(2, '0')}${_b.toRadixString(16).padLeft(2, '0')}";
+  }
+
+  @override
+  String toString() {
+    return "Color(hue: ${hue}deg, saturation: $saturation%, lightness: $lightness%)";
+  }
+}
 
 typedef Flavor = ({
   Color rosewater,
@@ -36,87 +140,6 @@ typedef Flavor = ({
   Color base,
 });
 
-extension FlavorSerializer on Flavor {
-  static Flavor decode(Map<String, dynamic> data) => (
-    rosewater: Color(data["rosewater"]),
-    flamingo: Color(data["flamingo"]),
-    pink: Color(data["pink"]),
-    mauve: Color(data["mauve"]),
-    red: Color(data["red"]),
-    maroon: Color(data["maroon"]),
-    peach: Color(data["peach"]),
-    yellow: Color(data["yellow"]),
-    green: Color(data["green"]),
-    teal: Color(data["teal"]),
-    sky: Color(data["sky"]),
-    sapphire: Color(data["sapphire"]),
-    blue: Color(data["blue"]),
-    lavender: Color(data["lavender"]),
-    text: Color(data["text"]),
-    subtext1: Color(data["subtext1"]),
-    subtext0: Color(data["subtext0"]),
-    overlay2: Color(data["overlay2"]),
-    overlay1: Color(data["overlay1"]),
-    overlay0: Color(data["overlay0"]),
-    surface2: Color(data["surface2"]),
-    surface1: Color(data["surface1"]),
-    surface0: Color(data["surface0"]),
-    crust: Color(data["crust"]),
-    mantle: Color(data["mantle"]),
-    base: Color(data["base"]),
-  );
-
-  Map<String, dynamic> encode() => {
-    "rosewater": rosewater.value,
-    "flamingo": flamingo.value,
-    "pink": pink.value,
-    "mauve": mauve.value,
-    "red": red.value,
-    "maroon": maroon.value,
-    "peach": peach.value,
-    "yellow": yellow.value,
-    "green": green.value,
-    "teal": teal.value,
-    "sky": sky.value,
-    "sapphire": sapphire.value,
-    "blue": blue.value,
-    "lavender": lavender.value,
-    "text": text.value,
-    "subtext1": subtext1.value,
-    "subtext0": subtext0.value,
-    "overlay2": overlay2.value,
-    "overlay1": overlay1.value,
-    "overlay0": overlay0.value,
-    "surface2": surface2.value,
-    "surface1": surface1.value,
-    "surface0": surface0.value,
-    "crust": crust.value,
-    "mantle": mantle.value,
-    "base": base.value,
-  };
-}
-
 typedef Catppuccin = ({Flavor latte, Flavor frappe, Flavor macchiato, Flavor mocha});
 
 Catppuccin catppuccin = (latte: latte, frappe: frappe, macchiato: macchiato, mocha: mocha);
-
-class FlavorTheme {
-  final Flavor light;
-  final Flavor dark;
-  const FlavorTheme({required this.light, required this.dark});
-
-  @decoder
-  static FlavorTheme decode(Map<String, dynamic> data) =>
-      FlavorTheme(light: FlavorSerializer.decode(data["light"]), dark: FlavorSerializer.decode(data["dark"]));
-
-  @encoder
-  Map<String, dynamic> encode() => {"light": light.encode(), "dark": dark.encode()};
-
-  Flavor get([Brightness brightness = Brightness.light]) {
-    if (brightness == Brightness.light) {
-      return light;
-    } else {
-      return dark;
-    }
-  }
-}

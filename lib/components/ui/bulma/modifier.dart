@@ -1,3 +1,5 @@
+import "package:jaspr/jaspr.dart";
+
 enum Color { primary, link, info, success, warning, danger }
 
 enum ColorMode { light, dark }
@@ -19,4 +21,8 @@ String getModifier(dynamic value, [String? name]) {
     return " $name";
   }
   return "";
+}
+
+String get isWebSkeleton {
+  return kIsWeb ? "" : "is-skeleton";
 }

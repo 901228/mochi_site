@@ -2,6 +2,8 @@ import "package:jaspr/dom.dart";
 import "package:jaspr/jaspr.dart";
 import "package:universal_web/web.dart" as web;
 
+import "../components/ui/bulma/modifier.dart" show isWebSkeleton;
+
 class PortalItem {
   final String name;
   final String image;
@@ -30,12 +32,12 @@ class PortalCard extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     final url = item.url;
-    final cardContent = div(classes: "card ${kIsWeb ? "" : "is-skeleton"}", [
+    final cardContent = div(classes: "card $isWebSkeleton", [
       div(classes: "card-image", [
         figure(classes: "image is-square", [
           img(
             src: item.image,
-            styles: Styles(padding: .all(2.em)),
+            styles: Styles(padding: .all(2.rem)),
             alt: "${item.name} logo",
           ),
         ]),

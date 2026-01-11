@@ -12,8 +12,8 @@ class HomePage extends StatelessComponent {
       div(classes: "is-flex is-flex-direction-column", [
         Logo(
           styles: Styles(
-            maxHeight: 40.vh,
-            padding: .symmetric(vertical: 1.em, horizontal: 8.em),
+            maxHeight: 384.px,
+            padding: .symmetric(vertical: 1.rem, horizontal: 8.rem),
           ),
         ),
         h1(classes: "title is-1 py-5", [.text("Mochi's Site")]),

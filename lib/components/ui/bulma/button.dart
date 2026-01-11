@@ -9,8 +9,10 @@ import "modifier.dart";
 class Button extends StatelessComponent {
   const Button({
     super.key,
+    this.id,
     required this.child,
     required this.onPressed,
+    this.attributes,
     this.styles,
     this.color,
     this.colorMode,
@@ -24,8 +26,10 @@ class Button extends StatelessComponent {
        href = null;
   const Button.a({
     super.key,
+    this.id,
     required this.child,
     required this.href,
+    this.attributes,
     this.styles,
     this.color,
     this.colorMode,
@@ -50,6 +54,8 @@ class Button extends StatelessComponent {
   final bool isBlock;
   final bool isDisabled;
   final String classes;
+  final String? id;
+  final Map<String, String>? attributes;
 
   final bool isA;
 
@@ -66,9 +72,17 @@ class Button extends StatelessComponent {
         " $classes";
 
     if (isA) {
-      return a(classes: cls, href: href!, styles: styles, [child]);
+      return a(id: id, attributes: attributes, classes: cls, href: href!, styles: styles, [child]);
     } else {
-      return button(classes: cls, disabled: isDisabled, onClick: onPressed, styles: styles, [child]);
+      return button(
+        id: id,
+        attributes: attributes,
+        classes: cls,
+        disabled: isDisabled,
+        onClick: onPressed,
+        styles: styles,
+        [child],
+      );
     }
   }
 }

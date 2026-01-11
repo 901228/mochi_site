@@ -49,16 +49,23 @@ class HeaderState extends State<Header> {
               ),
               href: "/portal",
             ),
-            NavbarItem.dropdown(
-              child: .text("More"),
-              items: [
-                NavbarItem(child: .text("About")),
-                NavbarItem(child: .text("Jobs"), isSelected: true),
-                NavbarItem(child: .text("Contact")),
-                NavbarDivider(),
-                NavbarItem(child: .text("Report an issue")),
-              ],
+            NavbarItem(
+              child: IconLabel.iconText(
+                icon: .lucide(icon: "book-text"),
+                label: "Blog",
+              ),
+              href: "/blog",
             ),
+            // NavbarItem.dropdown(
+            //   child: .text("More"),
+            //   items: [
+            //     NavbarItem(child: .text("About")),
+            //     NavbarItem(child: .text("Jobs"), isSelected: true),
+            //     NavbarItem(child: .text("Contact")),
+            //     NavbarDivider(),
+            //     NavbarItem(child: .text("Report an issue")),
+            //   ],
+            // ),
           ],
           endItems: [
             NavbarItem.div(child: div(classes: "buttons", [ThemeToggleButton()])),

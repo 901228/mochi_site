@@ -1,5 +1,7 @@
-import "package:jaspr/dom.dart" show Styles, UnitExt, i, span;
+import "package:jaspr/dom.dart" show i, span, Styles;
 import "package:jaspr/jaspr.dart" show StatelessComponent, BuildContext, Component;
+
+import "modifier.dart";
 
 class IconLabel extends StatelessComponent {
   final Icon icon;
@@ -31,23 +33,68 @@ class Icon extends StatelessComponent {
   final bool isLucide;
   final String faPrefix;
   final String classes;
-  const Icon.fa({super.key, required this.icon, this.classes = ""}) : isLucide = false, faPrefix = "";
-  const Icon.fab({super.key, required this.icon, this.classes = ""}) : isLucide = false, faPrefix = "fab fa-";
-  const Icon.fas({super.key, required this.icon, this.classes = ""}) : isLucide = false, faPrefix = "fas fa-";
-  const Icon.lucide({super.key, required this.icon, this.classes = ""}) : isLucide = true, faPrefix = "";
+  final bool ariaHidden;
+  final Styles? styles;
+  final Size? size;
+  const Icon.fa({
+    super.key,
+    required this.icon,
+    this.styles,
+    this.size,
+    this.classes = "",
+    this.ariaHidden = true,
+  }) : isLucide = false,
+       faPrefix = "";
+  const Icon.fab({
+    super.key,
+    required this.icon,
+    this.styles,
+    this.size,
+    this.classes = "",
+    this.ariaHidden = true,
+  }) : isLucide = false,
+       faPrefix = "fab fa-";
+  const Icon.fas({
+    super.key,
+    required this.icon,
+    this.styles,
+    this.size,
+    this.classes = "",
+    this.ariaHidden = true,
+  }) : isLucide = false,
+       faPrefix = "fas fa-";
+  const Icon.lucide({
+    super.key,
+    required this.icon,
+    this.styles,
+    this.size,
+    this.classes = "",
+    this.ariaHidden = true,
+  }) : isLucide = true,
+       faPrefix = "";
 
   @override
   Component build(BuildContext context) {
     if (isLucide) {
-      return span(classes: "icon lucide-icon $classes", [
-        i(
-          styles: Styles(width: 20.px, height: 16.px), // to align with bulma's fa settings
-          attributes: {"data-lucide": icon},
-          [],
-        ),
-      ]);
+      return span(
+        classes:
+            "icon lucide-icon $classes"
+            "${getModifier(size)}",
+        styles: styles,
+        [
+          i(attributes: {"data-lucide": icon, "aria-hidden": "$ariaHidden"}, []),
+        ],
+      );
     } else {
-      return span(classes: "icon fa-icon $classes", [i(classes: "$faPrefix$icon", [])]);
+      return span(
+        classes:
+            "icon fa-icon $classes"
+            "${getModifier(size)}",
+        styles: styles,
+        [
+          i(classes: "$faPrefix$icon", attributes: {"aria-hidden": "$ariaHidden"}, []),
+        ],
+      );
     }
   }
 }

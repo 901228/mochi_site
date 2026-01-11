@@ -5,6 +5,7 @@ import "package:jaspr/server.dart";
 import "package:jaspr_content/jaspr_content.dart";
 
 import "app.dart";
+import "config.dart";
 import "content/content.dart";
 import "main.server.options.dart";
 import "theme/theme.dart" hide Color;
@@ -40,7 +41,7 @@ void main() {
         final contentRoutes = routes.expand((r) => r).toList();
 
         return Document(
-          base: "mochi_site",
+          base: AppConfig.basePath,
           title: "Mochi Site",
           lang: "zh-TW",
           styles: [

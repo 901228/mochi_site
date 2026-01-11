@@ -1,6 +1,7 @@
 import "package:jaspr/dom.dart";
 import "package:jaspr/jaspr.dart";
 
+import "../../config.dart";
 import "../ui/bulma/icon.dart";
 import "../ui/bulma/navbar.dart";
 import "../ui/logo.dart";
@@ -23,7 +24,7 @@ class HeaderState extends State<Header> {
       NavBar(
         brand: NavbarBrand(
           children: [
-            NavbarItem(child: Logo.withText(), href: ""),
+            NavbarItem(child: Logo.withText(), href: AppConfig.assetPath("/")),
             NavbarBurger(
               isActive: isActive,
               onToggle: () {
@@ -40,21 +41,21 @@ class HeaderState extends State<Header> {
                 icon: .lucide(icon: "house"),
                 label: "Home",
               ),
-              href: "/",
+              href: AppConfig.assetPath("/"),
             ),
             NavbarItem(
               child: IconLabel.iconText(
                 icon: .lucide(icon: "link"),
                 label: "Portal",
               ),
-              href: "/portal",
+              href: AppConfig.assetPath("/portal"),
             ),
             NavbarItem(
               child: IconLabel.iconText(
                 icon: .lucide(icon: "book-text"),
                 label: "Blog",
               ),
-              href: "/blog",
+              href: AppConfig.assetPath("/blog"),
             ),
             // NavbarItem.dropdown(
             //   child: .text("More"),

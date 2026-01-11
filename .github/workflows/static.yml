@@ -45,7 +45,9 @@ jobs:
       - name: 'Build Jaspr'
         run: |
           dart pub global activate jaspr_cli
-          jaspr build --verbose
+          jaspr build --verbose \
+            --dart-define=BASE_PATH=/mochi_site/ \
+            --dart-define=ENVIRONMENT=production
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

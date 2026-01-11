@@ -43,3 +43,6 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+
+# For local testing
+/test-deploy/

@@ -30,7 +30,7 @@ void main() {
           FileTree(), // TODO: rewrite
           TocContent(),
         ],
-        extensions: [TableOfContentsExtension()],
+        extensions: [MochiTableOfContentsExtension()],
         layouts: [
           MochiBlogLayout(), DocsLayout(), // TODO: rewrite
           MochiTocLayout(),

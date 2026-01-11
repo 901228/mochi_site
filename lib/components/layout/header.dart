@@ -24,7 +24,7 @@ class HeaderState extends State<Header> {
       NavBar(
         brand: NavbarBrand(
           children: [
-            NavbarItem(child: Logo.withText(), href: AppConfig.assetPath("/")),
+            NavbarItem(child: Logo.withText(), href: AppConfig.relativeRoute("/")),
             NavbarBurger(
               isActive: isActive,
               onToggle: () {
@@ -41,21 +41,21 @@ class HeaderState extends State<Header> {
                 icon: .lucide(icon: "house"),
                 label: "Home",
               ),
-              href: AppConfig.assetPath("/"),
+              href: AppConfig.relativeRoute("/"),
             ),
             NavbarItem(
               child: IconLabel.iconText(
                 icon: .lucide(icon: "link"),
                 label: "Portal",
               ),
-              href: AppConfig.assetPath("/portal"),
+              href: AppConfig.relativeRoute("/portal"),
             ),
             NavbarItem(
               child: IconLabel.iconText(
                 icon: .lucide(icon: "book-text"),
                 label: "Blog",
               ),
-              href: AppConfig.assetPath("/blog"),
+              href: AppConfig.relativeRoute("/blog"),
             ),
             // NavbarItem.dropdown(
             //   child: .text("More"),

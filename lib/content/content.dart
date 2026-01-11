@@ -10,6 +10,8 @@ export "components/file_tree.component.dart" show FileTree;
 export "components/heading_link.component.dart" show HeadingLink;
 export "components/image.component.dart" show Image;
 export "components/toc_content.component.dart" show TocContent;
+// extensions
+export "extensions/table_of_content.extension.dart";
 // layouts
 export "layouts/blog.layout.dart";
 export "layouts/docs.layout.dart";
@@ -39,24 +41,37 @@ class RouterTree extends InheritedComponent {
       } else {
         RouteTreeItem? parent = _findItem(pathList.toList());
         if (parent == null) {
-          for (int i = 0; i < pathList.length; i++) {
-            final itemSubPathList = pathList.sublist(0, i + 1);
-            final itemParent = _findItem(itemSubPathList);
-            if (itemParent == null) {
+          for (final item in pathList) {
+            if (parent == null) {
+              for (final route in this.routes) {
+                if (route.name == item) {
+                  parent = route;
+                  break;
+                }
+              }
               if (parent == null) {
-                parent = RouteTreeItem(name: pathList[i], path: itemSubPathList.join("/"));
+                parent = RouteTreeItem(name: item, path: item);
                 this.routes.add(parent);
-              } else {
-                parent.routes.add(RouteTreeItem(name: pathList[i], path: itemSubPathList.join("/")));
+              }
+            } else {
+              RouteTreeItem? findParent;
+              for (final route in parent.routes) {
+                if (route.name == item) {
+                  findParent = route;
+                  break;
+                }
+              }
+              if (findParent == null) {
+                parent.routes.add(RouteTreeItem(name: item, path: "${parent.path}/$item"));
                 parent = parent.routes.last;
+              } else {
+                parent = findParent;
               }
             }
-            assert(parent != null);
-            parent!.routes.add(RouteTreeItem(name: name, path: path));
           }
-        } else {
-          parent.routes.add(RouteTreeItem(name: name, path: path));
         }
+        assert(parent != null);
+        parent!.routes.add(RouteTreeItem(name: name, path: path));
       }
     }
   }

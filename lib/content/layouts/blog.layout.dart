@@ -1,11 +1,12 @@
 import "package:intl/intl.dart";
 import "package:jaspr/dom.dart";
 import "package:jaspr/jaspr.dart";
-import "package:jaspr_content/jaspr_content.dart";
+import "package:jaspr_content/jaspr_content.dart" hide TocEntry, TableOfContents, TableOfContentsExtension;
 
 import "../../components/ui/bulma/button.dart";
 import "../../components/ui/bulma/icon.dart";
 import "../../theme/theme.dart";
+import "../extensions/table_of_content.extension.dart";
 import "layout.dart";
 
 class MochiBlogLayout extends MochiLayoutBase {
@@ -75,7 +76,7 @@ class MochiBlogLayoutComponent extends StatelessComponent {
       ),
 
       div(classes: "is-flex is-flex-direction-row-reverse is-justify-content-space-between", [
-        if (data["toc"] case final TableOfContents toc)
+        if (data["toc"] case final MochiTableOfContents toc)
           aside(id: "toc-aside", classes: "toc is-hidden-mobile ml-5", [
             nav(
               classes: "is-flex is-flex-direction-column px-4 py-4",
@@ -90,7 +91,7 @@ class MochiBlogLayoutComponent extends StatelessComponent {
           ]),
 
         div(styles: Styles(width: 100.percent), [
-          if (data["toc"] case final TableOfContents toc)
+          if (data["toc"] case final MochiTableOfContents toc)
             details(classes: "card is-hidden-tablet", [
               summary(classes: "card-header-title", styles: Styles(display: .listItem), [
                 .text("Table of Contents"),

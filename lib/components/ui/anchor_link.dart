@@ -13,7 +13,7 @@ class AnchorLink extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     final String? path = RouteState.of(context).path;
-    if (path != null) return a(classes: classes, href: "${AppConfig.assetPath(path)}#$anchor", [child]);
+    if (path != null) return a(classes: classes, href: "${AppConfig.relativeRoute(path)}#$anchor", [child]);
 
     return .fragment([]);
   }

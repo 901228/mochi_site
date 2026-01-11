@@ -40,6 +40,7 @@ void main() {
         final contentRoutes = routes.expand((r) => r).toList();
 
         return Document(
+          base: "mochi_site",
           title: "Mochi Site",
           lang: "zh-TW",
           styles: [

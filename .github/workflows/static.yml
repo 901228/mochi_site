@@ -35,8 +35,13 @@ jobs:
         uses: actions/configure-pages@v5
       - name: 'Setup Dart'
         uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: 3.10.4
       - name: 'Setup Flutter'
         uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version-file: pubspec.yaml # path to pubspec.yaml
       - name: 'Build Jaspr'
         run: |
           dart pub global activate jaspr_cli

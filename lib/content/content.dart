@@ -37,9 +37,26 @@ class RouterTree extends InheritedComponent {
         // is root path
         this.routes.add(RouteTreeItem(name: name, path: path));
       } else {
-        final parent = _findItem(pathList.toList());
-        assert(parent != null);
-        parent!.routes.add(RouteTreeItem(name: name, path: path));
+        RouteTreeItem? parent = _findItem(pathList.toList());
+        if (parent == null) {
+          for (int i = 0; i < pathList.length; i++) {
+            final itemSubPathList = pathList.sublist(0, i + 1);
+            final itemParent = _findItem(itemSubPathList);
+            if (itemParent == null) {
+              if (parent == null) {
+                parent = RouteTreeItem(name: pathList[i], path: itemSubPathList.join("/"));
+                this.routes.add(parent);
+              } else {
+                parent.routes.add(RouteTreeItem(name: pathList[i], path: itemSubPathList.join("/")));
+                parent = parent.routes.last;
+              }
+            }
+            assert(parent != null);
+            parent!.routes.add(RouteTreeItem(name: name, path: path));
+          }
+        } else {
+          parent.routes.add(RouteTreeItem(name: name, path: path));
+        }
       }
     }
   }

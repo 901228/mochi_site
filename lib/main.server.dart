@@ -25,12 +25,14 @@ void main() {
         components: [
           CodeBlock(),
           Callout(),
-          HeadingLink(),
+          HeadingLink(), // TODO: don't show in toc layout
           Image(),
           FileTree(), // TODO: rewrite
           TocContent(),
         ],
-        extensions: [MochiTableOfContentsExtension()],
+        extensions: [
+          MochiTableOfContentsExtension(), // TODO: not to jumpt to anchor by using link
+        ],
         layouts: [
           MochiBlogLayout(), DocsLayout(), // TODO: rewrite
           MochiTocLayout(),
@@ -86,6 +88,7 @@ void main() {
           ],
           head: [
             link(rel: "manifest", href: "manifest.json"),
+            link(rel: "shortcut icon", href: "favicon.ico", type: "image/x-icon"),
             script(src: "flutter_bootstrap.js", async: true),
 
             script(src: "highlight.min.js"),
